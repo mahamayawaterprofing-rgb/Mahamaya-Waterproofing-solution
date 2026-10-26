@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mahamaya Waterproofing | ऑनलाइन बुकिंग</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f0f9ff;color:#172033;line-height:1.55}header{background:linear-gradient(135deg,#082f49,#0369a1);color:#fff;text-align:center;padding:25px 14px}header h1{margin:0}main{max-width:760px;margin:22px auto;padding:0 12px}.card{background:#fff;border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 4px 16px #0001}h2{color:#075985;margin-top:0}label{display:block;font-weight:bold;margin:12px 0 5px}input,select,textarea{width:100%;padding:12px;font:inherit;border:1px solid #b8c8d3;border-radius:8px}textarea{min-height:75px}button,.button{display:block;width:100%;padding:13px;margin-top:16px;background:#087f5b;color:white;border:0;border-radius:9px;font-size:16px;font-weight:bold;text-align:center;text-decoration:none}.muted{font-size:13px;color:#526579}.ok{color:#087f5b}.err{color:#b42318}a{color:#075985}
+</style>
+</head>
+<body>
+<header><h1>Mahamaya Waterproofing</h1><p>छत की लीकेज • सीलन • वाटरप्रूफिंग</p><p>Ambikapur, Chhattisgarh</p></header>
+<main>
+<section class="card"><h2>बुकिंग / शिकायत दर्ज करें</h2>
+<p>फॉर्म भरकर भेजें। बुकिंग ऑनलाइन सेव होगी; WhatsApp पर नहीं भेजी जाएगी।</p>
+<form id="bookingForm">
+<label for="customer_name">आपका नाम *</label><input id="customer_name" required>
+<label for="customer_phone">आपका मोबाइल नंबर *</label><input id="customer_phone" type="tel" inputmode="tel" required>
+<label for="job_type">काम चुनें *</label><select id="job_type" required><option value="">काम चुनें</option><option>छत की लीकेज</option><option>वाटरप्रूफिंग</option><option>दीवार की सीलन</option><option>पानी की टंकी में लीकेज</option><option>अन्य समस्या / शिकायत</option></select>
+<label for="area">काम का क्षेत्रफल *</label><input id="area" type="number" min="1" step="any" required placeholder="जैसे 500">
+<label for="area_unit">क्षेत्रफल की इकाई</label><select id="area_unit"><option>Square Feet (sq ft)</option><option>Square Meter (sq m)</option></select>
+<label for="booking_date">पसंदीदा तारीख *</label><input id="booking_date" type="date" required>
+<label for="address">काम की जगह का पूरा पता *</label><textarea id="address" required></textarea>
+<label for="details">समस्या की जानकारी</label><textarea id="details"></textarea>
+<button type="submit">बुकिंग ऑनलाइन जमा करें</button>
+<p id="result" role="status" aria-live="polite" class="muted">बुकिंग जमा करने के बाद पुष्टि यहाँ दिखाई देगी।</p>
+</form></section>
+<section class="card"><h2>संपर्क</h2><p><b>नाम:</b> Mahamaya Waterproofing</p><p><b>मोबाइल / WhatsApp:</b> <a href="tel:8122689473">8122689473</a></p><p><b>पता:</b> Trikon Chowk, Bhati Road, Ambikapur, Chhattisgarh 497001</p><a href="https://wa.me/918122689473">WhatsApp पर संपर्क करें (वैकल्पिक)</a></section>
+<p class="muted">वेबसाइट मालिक: Dashboard खोलने के लिए <a href="admin.html">Admin Dashboard</a> पर जाएँ।</p>
+</main>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+// सेटअप से मिले Supabase Project URL और anon/publishable key यहाँ डालें। Service role key कभी न डालें।
+const SUPABASE_URL = 'PASTE_SUPABASE_PROJECT_URL_HERE';
+const SUPABASE_ANON_KEY = 'PASTE_SUPABASE_ANON_KEY_HERE';
+const form = document.getElementById('bookingForm');
+const result = document.getElementById('result');
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (SUPABASE_URL.includes('PASTE_') || SUPABASE_ANON_KEY.includes('PASTE_')) {
+    result.className = 'err';
+    result.textContent = 'ऑनलाइन बुकिंग चालू करने के लिए पहले Supabase की Project URL और anon/publishable key सेट करनी होगी। सेटअप निर्देश ZIP में हैं।';
+    return;
+  }
+  const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const data = {
+    customer_name: document.getElementById('customer_name').value.trim(),
+    customer_phone: document.getElementById('customer_phone').value.trim(),
+    job_type: document.getElementById('job_type').value,
+    area: Number(document.getElementById('area').value),
+    area_unit: document.getElementById('area_unit').value,
+    booking_date: document.getElementById('booking_date').value,
+    address: document.getElementById('address').value.trim(),
+    details: document.getElementById('details').value.trim(),
+    status: 'नई'
+  };
+  const { error } = await db.from('bookings').insert(data);
+  if (error) {
+    result.className = 'err';
+    result.textContent = 'बुकिंग सेव नहीं हो पाई। कृपया इंटरनेट/सेटअप जाँचें या दुकान से संपर्क करें।';
+    console.error(error);
+    return;
+  }
+  form.reset();
+  result.className = 'ok';
+  result.textContent = 'धन्यवाद! आपकी बुकिंग ऑनलाइन जमा हो गई है।';
+});
+</script>
+</body></html>
