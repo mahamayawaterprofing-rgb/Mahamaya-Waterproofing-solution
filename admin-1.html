@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mahamaya Waterproofing | Admin Dashboard</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,'Noto Sans Devanagari',sans-serif;background:#eaf7ff;color:#172033;line-height:1.55}.hero{background:linear-gradient(135deg,#062d46,#075985);color:white;padding:24px 18px 30px;text-align:center;border-bottom:5px solid #38bdf8}.brand-strip{min-height:130px;display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;padding:14px 18px;background:linear-gradient(100deg,#062d46,#075985 60%,#0e7490);color:#fff}.logo-mark{font-size:54px;line-height:1}.brand-title{font-size:clamp(24px,5vw,40px);font-weight:900;line-height:1.1}.brand-sub{color:#7dd3fc;font-weight:800;letter-spacing:1px}.tagline{margin:10px 0 0;color:#e0f2fe}.hero h1{font-size:clamp(30px,6vw,44px);margin:20px 0 4px;line-height:1.2}.hero p{font-size:clamp(18px,4vw,25px);margin:12px 0 0}main{max-width:1100px;margin:28px auto;padding:0 14px}.card{background:white;padding:clamp(18px,4vw,32px);border-radius:24px;margin-bottom:20px;box-shadow:0 8px 28px #07598514;border:1px solid #e0f2fe}h2{color:#075985;margin:0 0 18px;font-size:clamp(25px,4.5vw,34px)}.intro{background:#eaf7ff;color:#075985;border-radius:14px;padding:14px 16px;margin:12px 0 20px}label{display:block;font-weight:800;margin:16px 0 7px;font-size:18px}input,button,select{font:inherit;padding:14px;border:1px solid #bfd5e4;border-radius:12px}input{width:100%;background:#fff;min-height:54px}input:focus{outline:3px solid #bae6fd;border-color:#0284c7}button{background:linear-gradient(90deg,#0369a1,#0369c8);color:white;border:0;font-weight:bold;cursor:pointer;margin:12px 6px 0 0;min-height:52px;padding:12px 20px}button:hover{filter:brightness(1.06)}.muted{font-size:14px;color:#526579}.err{color:#b42318}.good{color:#087f5b}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.stat{background:#eaf7ff;padding:16px;border-radius:14px;color:#075985;text-align:center}.stat b{display:block;font-size:27px;margin-top:6px}.tablewrap{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:900px}th,td{padding:10px;border-bottom:1px solid #dbeafe;text-align:left;vertical-align:top}th{background:#e0f2fe}canvas{width:100%;height:240px;border:1px solid #e2e8f0;border-radius:12px}.hidden{display:none}.footer{background:#062d46;color:#fff;text-align:center;padding:24px 14px;margin-top:28px}.footer strong{font-size:20px}.footer small{display:block;margin-top:12px;color:#dbeafe}@media(max-width:520px){.brand-strip{gap:10px}.logo-mark{font-size:42px}.card{border-radius:20px}.hero{padding-bottom:25px}}
+</style></head><body>
+<div class="brand-strip"><div class="logo-mark" aria-hidden="true">⌂💧</div><div><div class="brand-title">MAHAMAYA</div><div class="brand-sub">WATERPROOFING</div><div class="tagline">Leakage Free | Stronger Tomorrow</div></div></div><header class="hero"><h1>Mahamaya Waterproofing</h1><p>ऑनलाइन बुकिंग Dashboard</p></header>
+<main>
+<section class="card"><h2>🔒 Admin Login</h2><div class="intro">ℹ️ यह पेज केवल अधिकृत Admin के लिए है। यहाँ से आप सभी बुकिंग, ग्राहक विवरण, तारीख के अनुसार ग्राफ और अनुमानित रकम देख सकते हैं।</div><p>Supabase में बनाए गए Admin ईमेल और पासवर्ड डालें। ग्राहक की बुकिंग के लिए यह लॉगिन नहीं है।</p>
+<label for="email">👤 Admin ईमेल</label><input id="email" type="email" autocomplete="username">
+<label for="password">🔐 पासवर्ड</label><input id="password" type="password" autocomplete="current-password">
+<button id="login">Login</button><button id="logout" class="hidden">Logout</button><button id="refresh" class="hidden">बुकिंग Refresh करें</button>
+<p id="status" class="muted">पहले Supabase URL/key जोड़ें और Admin यूज़र बनाएँ।</p></section>
+<div id="dashboard" class="hidden">
+<section class="card"><h2>बुकिंग का सारांश</h2><div class="stats">
+<div class="stat">कुल बुकिंग<b id="count">0</b></div><div class="stat">नई बुकिंग<b id="newCount">0</b></div><div class="stat">कुल क्षेत्रफल (संख्या का योग)<b id="areaSum">0</b></div><div class="stat">अनुमानित कुल रकम<b id="amountSum">₹0</b><span class="muted">रकम भरने के बाद ही</span></div>
+</div></section>
+<section class="card"><h2>तारीख के अनुसार बुकिंग</h2><canvas id="chart" width="1000" height="280" aria-label="तारीख के अनुसार बुकिंग ग्राफ"></canvas><p class="muted">ग्राफ हर तारीख पर मिली बुकिंग की संख्या दिखाता है।</p></section>
+<section class="card"><h2>सभी बुकिंग</h2><p class="muted">हर बुकिंग में अनुमानित रकम जोड़ें और स्थिति अपडेट करें।</p><div class="tablewrap"><table><thead><tr><th>तारीख</th><th>ग्राहक</th><th>मोबाइल</th><th>काम</th><th>क्षेत्रफल</th><th>पता</th><th>रकम (₹)</th><th>स्थिति</th><th>सेव</th></tr></thead><tbody id="rows"></tbody></table></div></section>
+</div>
+</main>
+<footer class="footer"><strong>Mahamaya Waterproofing</strong><p>हर छत, हर घर — हमारी जिम्मेदारी</p><p>☎ +91 8122689473 · Ambikapur, Chhattisgarh</p><small>© Mahamaya Waterproofing</small></footer>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+// index.html वाली ही Project URL और anon/publishable key यहाँ भी डालें। Service role key कभी न डालें।
+const SUPABASE_URL = 'PASTE_SUPABASE_PROJECT_URL_HERE';
+const SUPABASE_ANON_KEY = 'PASTE_SUPABASE_ANON_KEY_HERE';
+const statusEl=document.getElementById('status');
+let db=null;
+if(!SUPABASE_URL.includes('PASTE_') && !SUPABASE_ANON_KEY.includes('PASTE_')) db=createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+else statusEl.textContent='सेटअप बाकी है: Supabase URL और anon/publishable key जोड़ें।';
+const $=id=>document.getElementById(id);
+$('login').addEventListener('click',async()=>{
+ if(!db){statusEl.textContent='पहले Supabase सेटअप पूरा करें।';return;}
+ statusEl.textContent='Login हो रहा है…';
+ const {error}=await db.auth.signInWithPassword({email:$('email').value,password:$('password').value});
+ if(error){statusEl.className='err';statusEl.textContent='Login नहीं हुआ। ईमेल/पासवर्ड जाँचें।';return;}
+ await loadBookings();
+});
+$('logout').addEventListener('click',async()=>{if(db)await db.auth.signOut();$('dashboard').classList.add('hidden');$('logout').classList.add('hidden');$('refresh').classList.add('hidden');$('login').classList.remove('hidden');statusEl.textContent='आप Logout हो गए हैं।';});
+$('refresh').addEventListener('click',loadBookings);
+async function loadBookings(){
+ const {data:{user}}=await db.auth.getUser();
+ if(!user){statusEl.textContent='कृपया Admin Login करें।';return;}
+ const {data,error}=await db.from('bookings').select('*').order('created_at',{ascending:false});
+ if(error){statusEl.className='err';statusEl.textContent='बुकिंग नहीं पढ़ पाए। SQL/RLS सेटअप जाँचें।';return;}
+ statusEl.className='good';statusEl.textContent='बुकिंग लोड हो गईं।';
+ $('dashboard').classList.remove('hidden');$('logout').classList.remove('hidden');$('refresh').classList.remove('hidden');$('login').classList.add('hidden');
+ $('count').textContent=data.length;$('newCount').textContent=data.filter(x=>x.status==='नई').length;
+ $('areaSum').textContent=data.reduce((s,x)=>s+(Number(x.area)||0),0).toLocaleString('en-IN');
+ $('amountSum').textContent='₹'+data.reduce((s,x)=>s+(Number(x.amount)||0),0).toLocaleString('en-IN');
+ const grouped={};for(const b of data){const d=b.booking_date||'तारीख नहीं';grouped[d]=(grouped[d]||0)+1;}
+ drawChart(grouped);
+ const tbody=$('rows');tbody.replaceChildren();
+ for(const b of data){
+  const tr=document.createElement('tr');
+  const vals=[b.booking_date||'',b.customer_name||'',b.customer_phone||'',b.job_type||'',`${b.area||''} ${b.area_unit||''}`,b.address||''];
+  vals.forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.appendChild(td);});
+  const amountTd=document.createElement('td');const amount=document.createElement('input');amount.type='number';amount.min='0';amount.step='0.01';amount.value=b.amount??'';amount.placeholder='रकम';amount.style.width='110px';amountTd.appendChild(amount);tr.appendChild(amountTd);
+  const statusTd=document.createElement('td');const sel=document.createElement('select');['नई','संपर्क किया','काम तय','पूरा','रद्द'].forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;if(s===(b.status||'नई'))o.selected=true;sel.appendChild(o);});statusTd.appendChild(sel);tr.appendChild(statusTd);
+  const saveTd=document.createElement('td');const save=document.createElement('button');save.textContent='सेव';save.addEventListener('click',async()=>{const {error}=await db.from('bookings').update({amount:amount.value===''?null:Number(amount.value),status:sel.value}).eq('id',b.id);if(error){statusEl.className='err';statusEl.textContent='अपडेट सेव नहीं हुआ।';}else await loadBookings();});saveTd.appendChild(save);tr.appendChild(saveTd);tbody.appendChild(tr);
+ }
+}
+function drawChart(grouped){
+ const c=$('chart'),ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);
+ const entries=Object.entries(grouped).sort((a,b)=>a[0].localeCompare(b[0])).slice(-12);
+ if(!entries.length){ctx.fillStyle='#526579';ctx.font='18px Arial';ctx.fillText('अभी कोई बुकिंग नहीं है',25,45);return;}
+ const max=Math.max(...entries.map(x=>x[1]),1),w=(c.width-70)/entries.length;
+ entries.forEach(([label,val],i)=>{const h=(val/max)*180,x=45+i*w,y=220-h;ctx.fillStyle='#0284c7';ctx.fillRect(x,y,Math.max(12,w-14),h);ctx.fillStyle='#172033';ctx.font='14px Arial';ctx.fillText(String(val),x,y-7);ctx.save();ctx.translate(x+5,238);ctx.rotate(-0.35);ctx.fillText(label.slice(5),0,0);ctx.restore();});
+}
+</script></body></html>
